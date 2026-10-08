@@ -1,4 +1,3 @@
-const apiKey = 'SUA_API_KEY'; 
 const currencyRates = {};
 
 async function fetchCurrencyRates() {
