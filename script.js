@@ -1,20 +1,26 @@
-const apiKey = 'SUA_API_KEY'; // Insira sua chave da API aqui
+const apiKey = 'SUA_API_KEY'; 
 const currencyRates = {};
 
 async function fetchCurrencyRates() {
     try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const response = await fetch(
+            'https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL,ETH-BRL'
+        );
+
+        if (!response.ok) {
+            throw new Error('Falha ao consultar a API');
+        }
+
         const data = await response.json();
-        Object.assign(currencyRates, data.rates);
-        
-        // Adicionando taxas de criptomoedas
-        const cryptoResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
-        const cryptoData = await cryptoResponse.json();
-        
-        currencyRates.BTC = cryptoData.bitcoin.usd;
-        currencyRates.ETH = cryptoData.ethereum.usd;
+
+        currencyRates.BRL = 1;
+        currencyRates.USD = Number(data.USDBRL.bid);
+        currencyRates.EUR = Number(data.EURBRL.bid);
+        currencyRates.BTC = Number(data.BTCBRL.bid);
+        currencyRates.ETH = Number(data.ETHBRL.bid);
+
     } catch (error) {
-        console.error('Erro ao buscar taxas de câmbio:', error);
+        console.error('Erro ao buscar taxas:', error);
     }
 }
 
